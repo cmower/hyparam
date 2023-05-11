@@ -13,22 +13,22 @@ class HyperParameters:
         return re.sub(r"\W+", "_", name)
 
     def add_bool(self, name):
-        self._ensure_name(name)
+        name = self._ensure_name(name)
         self.data[name] = [True, False]
 
     def add_int(self, name, start, stop=None, step=1):
-        self._ensure_name(name)
+        name = self._ensure_name(name)
         if isinstance(stop, int):
             self.data[name] = list(range(start, stop, step))
         else:
             self.data[name] = list(range(start))
 
     def add_float(self, name, lower, upper=None, num=None):
-        self._ensure_name(name)
+        name = self._ensure_name(name)
         self.data[name] = np.linspace(lower, upper, num=num, dtype=float).tolist()
 
     def add_list(self, name, values=[]):
-        self._ensure_name(name)
+        name = self._ensure_name(name)
         assert len(values) > 0, "values list must not be empty"
         self.data[name] = values
 
