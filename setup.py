@@ -19,4 +19,5 @@ setup(
         "Bug Tracker": "https://github.com/cmower/hyparam/issues",
         "Source": "https://github.com/cmower/hyparam",
     },
+    install_requires=["numpy", "PyYAML"],
 )

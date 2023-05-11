@@ -1,8 +1,12 @@
 import re
-import yaml
-import numpy as np
 from itertools import product
 from collections import namedtuple, OrderedDict
+
+# PyYAML: https://pyyaml.org/
+import yaml
+
+# NumPy: https://numpy.org/
+import numpy as np
 
 
 class HyperParameters:
