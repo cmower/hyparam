@@ -8,7 +8,7 @@ setup(
     description="Container for hyper parameter tuning in machine learning. ",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="0.0.0",
+    version="1.0.0",
     author="Christopher E. Mower",
     author_email="christopher.mower@kcl.ac.uk",
     url="https://github.com/cmower/hyparam",
