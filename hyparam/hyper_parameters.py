@@ -12,18 +12,15 @@ class HyperParameters:
         assert name not in self.data, f"'{name}' is not a unique name"
         return re.sub(r"\W+", "_", name)
 
-    def add_bool(self, name):
+    def add_switch(self, name):
         name = self._ensure_name(name)
         self.data[name] = [True, False]
 
-    def add_int(self, name, start, stop=None, step=1):
+    def add_range(self, name, start, stop, step):
         name = self._ensure_name(name)
-        if isinstance(stop, int):
-            self.data[name] = list(range(start, stop, step))
-        else:
-            self.data[name] = list(range(start))
+        self.data[name] = list(range(start, stop, step))
 
-    def add_float(self, name, lower, upper=None, num=None):
+    def add_linspace(self, name, lower, upper, num):
         name = self._ensure_name(name)
         self.data[name] = np.linspace(lower, upper, num=num, dtype=float).tolist()
 
