@@ -11,6 +11,23 @@ class HyperParameters:
 
     @staticmethod
     def from_file(file_name):
+        """Load parameter space from file.
+
+        hp = HyperParameters.from_file(file_name)
+
+        Parameters
+        ----------
+
+        file_name (str)
+          YAML file containing parameter space specification.
+
+        Returns
+        -------
+
+        hp (HyperParameters)
+          Container defining the parameter space.
+
+        """
         # Load configuration from file
         with open(file_name, "r") as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
@@ -39,23 +56,105 @@ class HyperParameters:
         return re.sub(r"\W+", "_", name)
 
     def add_switch(self, name):
+        """Add switch parameter: True/False.
+
+        hp = HyperParameters()
+        hp.add_switch(name)
+
+        Parameters
+        ----------
+
+        name (str)
+          Name of the parameter.
+
+        """
         name = self._ensure_name(name)
         self.data[name] = [True, False]
 
     def add_range(self, name, start, stop, step):
+        """Add range parameter.
+
+        hp = HyperParameters()
+        hp.add_range(name, start, stop, step)
+
+        Parameters
+        ----------
+
+        name (str)
+          Name of the parameter.
+
+        start (int)
+          Start of integer sequence.
+
+        stop (int)
+          End of integer sequence.
+
+        step (int)
+          The integer sequence from start (inclusive) to stop
+          (exclusive) by step.
+
+        """
         name = self._ensure_name(name)
         self.data[name] = list(range(start, stop, step))
 
     def add_linspace(self, name, lower, upper, num):
+        """Add linspace parameter.
+
+        hp = HyperParameters()
+        hp.add_linspace(name, lower, upper, num)
+
+        Parameters
+        ----------
+
+        name (str)
+          Name of the parameter.
+
+        lower (float)
+          The starting value of the sequence.
+
+        upper (float)
+          The end value of the sequence.
+
+        num (int)
+          Number of samples to generate. Must be non-negative.
+
+        """
         name = self._ensure_name(name)
         self.data[name] = np.linspace(lower, upper, num=num, dtype=float).tolist()
 
-    def add_list(self, name, values=[]):
+    def add_list(self, name, values):
+        """Add list parameter.
+
+        hp = HyperParameters()
+        hp.add_list(name, values)
+
+        Parameters
+        ----------
+
+        name (str)
+          Name of the parameter.
+
+        values (list)
+          List of values.
+
+        """
         name = self._ensure_name(name)
         assert len(values) > 0, "values list must not be empty"
         self.data[name] = values
 
     def choices(self):
+        """Iterate over parameter space.
+
+        hp = HyperParameters()
+        choices = hp.choices()
+
+        Returns
+        -------
+
+        choices (generator)
+           Generator that iterates over parameter space.
+
+        """
         choice_tuple = namedtuple("choice", self.data.keys())
         for choice_data in product(*self.data.values()):
             yield choice_tuple(*choice_data)
