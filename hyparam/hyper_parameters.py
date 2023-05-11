@@ -1,4 +1,5 @@
 import re
+import yaml
 import numpy as np
 from itertools import product
 from collections import namedtuple, OrderedDict
@@ -7,6 +8,31 @@ from collections import namedtuple, OrderedDict
 class HyperParameters:
     def __init__(self):
         self.data = OrderedDict()
+
+    @staticmethod
+    def from_file(file_name):
+        # Load configuration from file
+        with open(file_name, "r") as f:
+            config = yaml.load(f, Loader=yaml.FullLoader)
+
+        # Setup parameter space
+        hp = HyperParameters()
+        for name, spec in config.items():
+            param_type = spec["type"]
+
+            if param_type == "switch":
+                hp.add_switch(name)
+            elif param_type == "range":
+                setup = spec["setup"]
+                hp.add_range(name, setup["start"], setup["stop"], setup["step"])
+            elif param_type == "linspace":
+                setup = spec["setup"]
+                hp.add_linspace(name, setup["lower"], setup["upper"], setup["num"])
+            elif param_type == "list":
+                setup = spec["setup"]
+                hp.add_list(name, setup["values"])
+
+        return hp
 
     def _ensure_name(self, name):
         assert name not in self.data, f"'{name}' is not a unique name"
